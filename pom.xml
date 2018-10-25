@@ -17,6 +17,7 @@
 	</properties>
 
 	<modules>
+		<module>common</module>
 		<module>server</module>
 		<module>client</module>
 		<module>dispatcher</module>
@@ -24,6 +25,26 @@
 
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>de.hs.albsig.vs.pk1</groupId>
+				<artifactId>common</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>de.hs.albsig.vs.pk1</groupId>
+				<artifactId>server</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>de.hs.albsig.vs.pk1</groupId>
+				<artifactId>client</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>de.hs.albsig.vs.pk1</groupId>
+				<artifactId>dispatcher</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.apache.logging.log4j</groupId>
 				<artifactId>log4j-api</artifactId>
