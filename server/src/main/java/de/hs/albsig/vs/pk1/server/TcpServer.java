@@ -22,13 +22,9 @@ import de.hs.albsig.vs.pk1.common.model.Constants;
 import de.hs.albsig.vs.pk1.common.model.Message;
 import de.hs.albsig.vs.pk1.dispatcher.Dispatcher;
 
-public class TcpServer implements Server {
+public class TcpServer extends AbstractServer {
 
     private static final Logger LOGGER = LogManager.getLogger();
-
-    private final Channel channel;
-    private final Dispatcher dispatcher;
-
     private ServerSocket serverSocket;
     private Socket clientSocket;
     private OutputStream socketoutstr;
@@ -43,15 +39,13 @@ public class TcpServer implements Server {
      * @param dispatcher
      */
     public TcpServer(final Channel channel, final Dispatcher dispatcher) {
-        this.channel = channel;
-        this.dispatcher = dispatcher;
+        super(channel, dispatcher);
     }
 
     @Override
     public void registerService() throws ServerException {
+        super.registerService();
         try {
-            LOGGER.trace("registerService()");
-            dispatcher.rergister(channel, UUID.randomUUID());
             serverSocket = new ServerSocket(channel.getPort());
             while (true) {
                 try {
@@ -79,6 +73,7 @@ public class TcpServer implements Server {
 
     @Override
     public void deregisterService() throws ServerException {
+        super.deregisterService();
         closeAll();
     }
 

@@ -13,8 +13,6 @@ import java.net.UnknownHostException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import de.hs.albsig.vs.pk1.common.model.Channel;
@@ -78,15 +76,8 @@ public class TcpClient implements Client {
         try {
             LOGGER.info(
                     new ObjectMapper().readValue(sendRequest(), Message.class));
-        } catch (final JsonParseException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (final JsonMappingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
         } catch (final IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
 
     }
@@ -123,9 +114,9 @@ public class TcpClient implements Client {
                 LOGGER.error("Can't close", e);
             }
         } catch (final UnknownHostException uhe) {
-            System.out.println(uhe);
+            LOGGER.error(uhe.getMessage(), uhe);
         } catch (final IOException ioe) {
-            System.out.println(ioe);
+            LOGGER.error(ioe.getMessage(), ioe);
         }
 
         return str;

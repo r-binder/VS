@@ -10,29 +10,21 @@ import java.io.OutputStreamWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.hs.albsig.vs.pk1.common.model.Channel;
 import de.hs.albsig.vs.pk1.common.model.Constants;
 
-public class TcpDispatcher implements Dispatcher {
+public class TcpDispatcher extends AbstractDispatcher {
 
     private static final Logger LOGGER = LogManager.getLogger();
-
     private static final int PORT = 1232;
-    private final Map<UUID, Channel> serverLocationMap;
 
     public TcpDispatcher() {
-        serverLocationMap = new HashMap<>();
+        super();
         startService();
     }
 
@@ -76,46 +68,12 @@ public class TcpDispatcher implements Dispatcher {
                         LOGGER.error("Can't close", e);
                     }
                 }
-            } catch (final UnknownHostException uhe) {
-                System.out.println(uhe);
-            } catch (final IOException ioe) {
-                System.out.println(ioe);
+            } catch (final UnknownHostException e) {
+                LOGGER.error(e.getMessage(), e);
+            } catch (final IOException e) {
+                LOGGER.error(e.getMessage(), e);
             }
         }).start();
 
     }
-
-    @Override
-    public void rergister(final Channel channel, final UUID server) {
-        serverLocationMap.put(server, channel);
-    }
-
-    @Override
-    public void deregister(final UUID server) {
-        LOGGER.trace("Dispatcher deregister {}", server);
-        serverLocationMap.remove(server);
-    }
-
-    @Override
-    public Channel getChannel(final UUID server) {
-        LOGGER.trace("Dispatcher getChannel");
-        return serverLocationMap.get(server);
-    }
-
-    @Override
-    public UUID loacateServer() {
-        LOGGER.trace("Dispatcher loacateServer");
-        if (serverLocationMap.size() == 0) {
-            return null;
-        }
-
-        final int randomNumber = new Random().nextInt(serverLocationMap.size());
-        return new ArrayList<>(serverLocationMap.keySet()).get(randomNumber);
-    }
-
-    @Override
-    public void establishConnection() {
-        throw new UnsupportedOperationException();
-    }
-
 }
